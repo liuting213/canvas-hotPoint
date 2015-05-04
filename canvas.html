@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas</title>
+	<style>
+		canvas{
+			/*background-color: pink;*/
+			border: dashed 1px gray;
+			width: 400px;
+			height: 400px;
+		}
+	</style>
+
+</head>
+<body>
+	<button id="button">这里是按钮</button>
+	<canvas id="canvas" >
+		
+	</canvas>
+		<script>
+			var position = {};
+			var SCALE = 1; 
+			var x = -1;
+			var y = -1;
+			var canvas = document.getElementById("canvas");
+			var context = canvas.getContext("2d");
+
+		// function loadDemo(){
+			
+			context.globalAlpha =  0.2;
+			context.globalCompositeOperation = "lighter";
+
+
+			function example(){
+				if(x!=-1){
+					addToPoint(x,y);
+				}
+				setTimeout(example,100);
+				
+			}
+		// 	canvas.onmousemove = function(e){
+		// 		x = e.clientX - e.target.offsetLeft;
+		// 		y = e.clientY - e.target.offsetTop;
+		// 		addToPoint(x,y);
+		// 	};
+			example();
+
+		// }
+		function addToPoint (x,y) {
+			x = Math.floor(x/SCALE);
+			y = Math.floor(y/3);
+			if(!position[[x,y]]){
+				position[[x,y]] = 1;
+			}else if(position[[x,y]] == 10){
+				return;
+			}else{
+				position[[x,y]]++;
+			}
+			drawPoint(x,y,position[[x,y]]);
+		}
+		function drawPoint(x,y,radius){
+
+			context.fillStyle = getColor(radius);
+			radius = Math.sqrt(radius)*6;
+			context.beginPath();
+			context.arc(x,y,radius,0,Math.PI*2,true); 
+			context.closePath();
+			context.fill();
+		}
+		function getColor(radius){
+			// var colors = ["#072933","#2E4045","#8C5938","#B2814E","#FAC268","#FAD237"];
+			var colors = ["#FF82AB","#FF7F00","#FF69B4","#FF3E96","#FF00FF","#FAFAFA"];
+			var i = Math.floor(radius/2);
+			return colors[i];
+		}
+		//  window.addEventListener("load",loadDemo,true);
+		document.getElementById("button").onclick=function(){
+			position = {};
+			x = -1;
+			y = -1;
+			context.clearRect(0,0,400,400);
+		}
+		// document.getElementById("canvas").onmousemove=function(){
+		// 	alert("hh");
+		// }
+		document.getElementById("canvas").onmousemove=function(e){
+				x = e.clientX - e.target.offsetLeft;
+				y = e.clientY - e.target.offsetTop;
+				addToPoint(x,y);
+				// alert("jj");
+		}
+		
+	</script>
+</body>
+</html>
